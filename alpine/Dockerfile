@@ -18,9 +18,6 @@ RUN echo $TIMEZONE > /etc/timezone
 
 #install base packages
 RUN apk add vim
-#tar \
-#wget \
-
 
 #exec command when start container
 #这里不能用 ENTRYPOINT 后面继承改镜像的 cmd会当作参数传入 无法执行
