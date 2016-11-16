@@ -1,0 +1,47 @@
+version:'1'
+services:
+	alpine:
+		build:alpine
+		image:jepson/alpine
+	store:
+		build:store
+		image:jepson/store
+		depends_on:
+			- "alpine"
+		volumes:
+			- "/data/docker/data/:/data"
+		restart:always
+	memcached:
+		build:memcached
+		image:jepson/memcached
+		depends_on:
+			- "alpine"
+		restart:always
+	php:
+		build:php
+		image:jepson/php
+		depends_on:
+			- "alpine"
+		links:
+			- memcached
+		volumes:
+			- "/data/docker/php/:/app"
+		volumes_from:
+			- "store"
+		restart:always
+	nginx:
+		build:nginx
+		image:jepson/nginx
+		depends_on:
+			- "alpine"
+		
+		links:
+			- "php"
+		volumes:
+			- "/data/docker/nginx/:/app"
+		volumes_from:
+			- "store"
+		ports:
+			- "80:80"
+		restart:always
+		

@@ -1,0 +1,9 @@
+#环境记得配置docker 允许共享目录
+#-v 参数修改为对应位置 docker_data目录
+docker run --name store -d -it -v  C:\Users\wjp13\projects\data\:/data jepson/store
+
+docker run --name memcached -d jepson/memcached
+
+docker run --name php -d -it -v  C:\Users\wjp13\projects\php\:/app --volumes-from store --link memcached jepson/php
+
+docker run --name nginx -d -p 80:80 -v  C:\Users\wjp13\projects\nginx\:/app --volumes-from store --link php jepson/nginx
