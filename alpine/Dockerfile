@@ -1,8 +1,12 @@
 #base image on alpine
 FROM alpine:latest
 
+#arg
+ARG auth
+ARG email
+
 #maintainer
-MAINTAINER jepson wjp13671142513@163.com
+MAINTAINER $auth $email
 
 #china mirrors
 RUN echo "http://mirrors.ustc.edu.cn/alpine/edge/main" >> /etc/apk/repositories
@@ -20,5 +24,4 @@ RUN echo $TIMEZONE > /etc/timezone
 RUN apk add vim
 
 #exec command when start container
-#这里不能用 ENTRYPOINT 后面继承改镜像的 cmd会当作参数传入 无法执行
 CMD ["sh"]

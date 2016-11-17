@@ -1,6 +1,0 @@
-version:'1'
-services:
-	alpine:
-		build:alpine
-		image:jepson/alpine
-		

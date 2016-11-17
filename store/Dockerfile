@@ -1,8 +1,12 @@
 #base image on alpine
-FROM jepson/alpine:latest
+FROM jepson/alpine_1:latest
+
+#arg
+ARG auth
+ARG email
 
 #maintainer
-MAINTAINER jepson wjp13671142513@163.com
+MAINTAINER $auth $email
 
 #store
 RUN mkdir -pv /data
