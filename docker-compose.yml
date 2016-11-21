@@ -19,7 +19,7 @@ services:
   image: jepson/store_1
   container_name: store_1
   depends_on:
-   - "alpine"
+   - alpine
   volumes:
    - C:\Users\wjp13\projects\data:/data
   restart: always
@@ -33,33 +33,47 @@ services:
   image: jepson/memcached_1
   container_name: memcached_1
   depends_on:
-   - "alpine"
+   - alpine
   restart: always
 
-  php:
-  		build:php
-  		image:jepson/php
-  		depends_on:
-  			- "alpine"
-  		links:
-  			- memcached
-  		volumes:
-  			- "/data/docker/php/:/app"
-  		volumes_from:
-  			- "store"
-  		restart:always
-  	nginx:
-  		build:nginx
-  		image:jepson/nginx
-  		depends_on:
-  			- "alpine"
+ php:
+  build:
+   context: php
+   args:
+    auth: jepson
+    email: wjp13671142513@163.com
+  image: jepson/php_1
+  container_name: php_1
+  depends_on:
+   - alpine
+   - store
+   - memcached
+  links:
+   - memcached
+  volumes:
+   - /data/docker/php/:/app
+  volumes_from:
+   - store
+  restart: always
 
-  		links:
-  			- "php"
-  		volumes:
-  			- "/data/docker/nginx/:/app"
-  		volumes_from:
-  			- "store"
-  		ports:
-  			- "80:80"
-  		restart:always
+ nginx:
+  build:
+   context: nginx
+  args:
+   auth: jepson
+   email: wjp13671142513@163.com
+  image: jepson/nginx_1
+  container_name: nginx_1
+  depends_on:
+   - alpine
+   - store
+   - php
+  links:
+   - php
+  volumes:
+   - /data/docker/nginx/:/app
+  volumes_from:
+   - store
+  ports:
+   - 80:80
+  restart: always
