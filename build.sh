@@ -40,13 +40,15 @@ cp -rf ${current_path}"/projects/data/"* data/
 #build
 cd ${current_path}
 
-sed -irn "s/%auth%/${auth}/g" ./
-sed -irn "s/%email%/${email}/g" ./
-sed -irn "s/%suffix%/${suffix}/g" ./
+sed -irn "s/%auth%/${auth}/g" `grep %auth% -rl ./`
+sed -irn "s/%email%/${email}/g" `grep %email% -rl ./`
+sed -irn "s/%suffix%/${suffix}/g" `grep %suffix% -rl ./`
 
 sed -in "s/%store_data%/${project_path}data/" docker-compose.yml
 sed -in "s/%php_app%/${project_path}php/" docker-compose.yml
 sed -in "s/%nginx_app%/${project_path}nginx/" docker-compose.yml
+
+rm -rf *rn
 
 if [os == 'windows'];then
     docker-compose.exe up
