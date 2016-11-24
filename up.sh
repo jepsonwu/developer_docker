@@ -50,7 +50,7 @@ sed -in "s#%nginx_app%#${project_path}nginx#" docker-compose.yml
 
 rm -rf `grep -rl ./ |grep rn`
 
-if [os == 'windows'];then
+if [ "${os}"x = 'windows'x ];then
     docker-compose.exe up
 else
     docker-compose up
