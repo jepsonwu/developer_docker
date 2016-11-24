@@ -1,7 +1,7 @@
 #!/bin/bash
 
-docker stop store
-docker rm store
-docker rmi jepson/store
+docker stop store%suffix%
+docker rm store%suffix%
+docker rmi %auth%/store%suffix%
 
-docker build -t jepson/store .
+docker build -t %auth%/store%suffix% .

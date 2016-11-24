@@ -1,12 +1,8 @@
 #base image on alpine
-FROM jepson/alpine_1:latest
-
-#arg
-ARG auth
-ARG email
+FROM %auth%/alpine%suffix%:latest
 
 #maintainer
-MAINTAINER $auth $email
+MAINTAINER %auth% %email%
 
 #install nginx version
 RUN mkdir -pv /app/{conf,logs}

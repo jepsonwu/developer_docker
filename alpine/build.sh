@@ -1,6 +1,6 @@
 #!/bin/bash
-docker stop alpine
-docker rm alpine
-docker rmi jepson/alpine
+docker stop alpine%suffix%
+docker rm alpine%suffix%
+docker rmi %auth%/alpine%suffix%
 
-docker build -t jepson/alpine .
+docker build -t %auth%/alpine%suffix% .

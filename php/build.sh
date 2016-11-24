@@ -1,7 +1,7 @@
 #!/bin/bash
 
-docker stop php
-docker rm php
-docker rmi jepson/php
+docker stop php%suffix%
+docker rm php%suffix%
+docker rmi %auth%/php%suffix%
 
-docker build -t jepson/php .
+docker build -t %auth%/php%suffix% .

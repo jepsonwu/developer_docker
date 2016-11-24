@@ -1,7 +1,7 @@
 #!/bin/bash
 
-docker stop nginx
-docker rm nginx
-docker rmi jepson/nginx
+docker stop nginx%suffix%
+docker rm nginx%suffix%
+docker rmi %auth%/nginx%suffix%
 
-docker build -t jepson/nginx .
+docker build -t %auth%/nginx%suffix% .

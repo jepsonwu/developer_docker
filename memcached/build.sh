@@ -1,7 +1,7 @@
 #!/bin/bash
 
-docker stop memcached
-docker rm memcached
-docker rmi jepson/memcached
+docker stop memcached%suffix%
+docker rm memcached%suffix%
+docker rmi %auth%/memcached%suffix%
 
-docker build -t jepson/memcached .
+docker build -t %auth%/memcached%suffix% .

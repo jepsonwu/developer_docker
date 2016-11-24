@@ -3,35 +3,26 @@ services:
  alpine:
   build:
    context: alpine
-   args:
-    auth: jepson
-    email: wjp13671142513@163.com
-  image: jepson/alpine_1
-  container_name: alpine_1
+  image: %auth%/alpine%suffix%
+  container_name: alpine%suffix%
   restart: 'no'
 
  store:
   build:
    context: store
-   args:
-    auth: jepson
-    email: wjp13671142513@163.com
-  image: jepson/store_1
-  container_name: store_1
+  image: %auth%/store%suffix%
+  container_name: store%suffix%
   depends_on:
    - alpine
   volumes:
-   - C:\Users\wjp13\projects\data:/data
+   - %store_data%:/data
   restart: always
 
  memcached:
   build:
    context: memcached
-   args:
-    auth: jepson
-    email: wjp13671142513@163.com
-  image: jepson/memcached_1
-  container_name: memcached_1
+  image: %auth%/memcached%suffix%
+  container_name: memcached%suffix%
   depends_on:
    - alpine
   restart: always
@@ -39,11 +30,8 @@ services:
  php:
   build:
    context: php
-   args:
-    auth: jepson
-    email: wjp13671142513@163.com
-  image: jepson/php_1
-  container_name: php_1
+  image: %auth%/php%suffix%
+  container_name: php%suffix%
   depends_on:
    - alpine
    - store
@@ -51,7 +39,7 @@ services:
   links:
    - memcached
   volumes:
-   - /data/docker/php/:/app
+   - %php_app%:/app
   volumes_from:
    - store
   restart: always
@@ -59,11 +47,8 @@ services:
  nginx:
   build:
    context: nginx
-   args:
-    auth: jepson
-    email: wjp13671142513@163.com
-  image: jepson/nginx_1
-  container_name: nginx_1
+  image: %auth%/nginx%suffix%
+  container_name: nginx%suffix%
   depends_on:
    - alpine
    - store
@@ -71,7 +56,7 @@ services:
   links:
    - php
   volumes:
-   - /data/docker/nginx/:/app
+   - %nginx_app%:/app
   volumes_from:
    - store
   ports:

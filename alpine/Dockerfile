@@ -1,12 +1,8 @@
 #base image on alpine
 FROM alpine:latest
 
-#arg
-ARG auth
-ARG email
-
 #maintainer
-MAINTAINER $auth $email
+MAINTAINER %auth% %email%
 
 #china mirrors
 RUN echo "http://mirrors.ustc.edu.cn/alpine/edge/main" >> /etc/apk/repositories
