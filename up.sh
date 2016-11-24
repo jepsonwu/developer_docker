@@ -44,9 +44,9 @@ sed -irn "s/%auth%/${auth}/g" `grep %auth% -rl ./ |grep -v up`
 sed -irn "s/%email%/${email}/g" `grep %email% -rl ./ |grep -v up`
 sed -irn "s/%suffix%/${suffix}/g" `grep %suffix% -rl ./ |grep -v up`
 
-sed -in "s/%store_data%/${project_path}data/" docker-compose.yml
-sed -in "s/%php_app%/${project_path}php/" docker-compose.yml
-sed -in "s/%nginx_app%/${project_path}nginx/" docker-compose.yml
+sed -in "s#%store_data%#${project_path}data#" docker-compose.yml
+sed -in "s#%php_app%#${project_path}php#" docker-compose.yml
+sed -in "s#%nginx_app%#${project_path}nginx#" docker-compose.yml
 
 rm -rf `grep -rl ./ |grep rn`
 
