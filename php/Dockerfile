@@ -22,7 +22,7 @@ php5-mysql \
 #php5-imap \
 php5-amqp \
 php5-doc \
-#php5-imagick \
+php5-imagick \
 php5-zlib \
 php5-calendar \
 php5-mysqli \

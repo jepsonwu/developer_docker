@@ -59,9 +59,9 @@ services:
  nginx:
   build:
    context: nginx
-  args:
-   auth: jepson
-   email: wjp13671142513@163.com
+   args:
+    auth: jepson
+    email: wjp13671142513@163.com
   image: jepson/nginx_1
   container_name: nginx_1
   depends_on:

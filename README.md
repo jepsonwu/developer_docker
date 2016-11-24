@@ -21,18 +21,10 @@ Base on alpine.
 - php
 - nginx
 
-## Build from docker-compose.yml
+## Build from sh
 
 ```
-edit file
-```
-
-```
-mkdir -pv /data
-```
-
-```
-docker-compose create
+./build.sh
 ```
 
 ## Manual build
@@ -52,7 +44,7 @@ docker run --name nginx -d -p 80:80 -v  /data_path:/app --volumes-from store --l
 ```
 
 ## More
-To learn more about all the features of Compose see the list of features.
+To learn more about all the features of [docker compose](https://docs.docker.com/compose/compose-file/) see the list of features.
 
 ## Notice
 
