@@ -24,7 +24,7 @@ Base on alpine.
 ## Build from sh
 
 ```
-./build.sh
+./up.sh
 ```
 
 ## Manual build
