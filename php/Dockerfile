@@ -87,6 +87,8 @@ RUN chmod 777 -R /var/log/
 RUN sed -i -e "s/listen\s*=\s*127.0.0.1:9000/listen = 9000/g" /etc/php5/php-fpm.conf
 RUN mv /etc/php5/php.ini /etc/php5/php.ini_bak
 RUN ln -s /app/conf/php.ini /etc/php5/php.ini
+RUN cd /data/web/
+RUN curl -sS https://getcomposer.org/installer |php5
 
 ##install libevent  ## pecl 去掉-n
 #RUN apk add autoconf gcc g++ libevent libevent-dev make
