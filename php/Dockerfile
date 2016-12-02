@@ -90,6 +90,12 @@ RUN ln -s /app/conf/php.ini /etc/php5/php.ini
 RUN cd /data/web/
 RUN curl -sS https://getcomposer.org/installer |php5
 
+##install swoole
+#RUN apk add linux-headers ##install from source need head
+#RUN pecl install swoole ##1.9
+##you should install from source if need 2.0
+##add ini extension = swoole.so
+
 ##install libevent  ## pecl 去掉-n
 #RUN apk add autoconf gcc g++ libevent libevent-dev make
 #RUN pecl install libevent-0.1.0
