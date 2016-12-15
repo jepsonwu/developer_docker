@@ -96,7 +96,7 @@ RUN curl -sS https://getcomposer.org/installer |php5
 ##you should install from source if need 2.0
 ##add ini extension = swoole.so
 
-##install libevent  ## pecl 去掉-n
+##install libevent  ## pecl 去掉-n 否则报错
 #RUN apk add autoconf gcc g++ libevent libevent-dev make
 #RUN pecl install libevent-0.1.0
 #RUN chmod +x /usr/lib/php5/modules/libevent.so
