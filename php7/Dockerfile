@@ -4,59 +4,41 @@ FROM %auth%/alpine%suffix%:latest
 #maintainer
 MAINTAINER %auth% %email%
 
+RUN apk update
+
 #install base
 RUN apk add rabbitmq-c
 
 #install php
 RUN apk add php7 \
 php7-zip \
-#php7-cgi \
-#php7-embed \
 php7-xmlrpc \
 php7-sysvshm \
-php7-mysql \
-#php7-imap \
 php7-amqp \
 php7-doc \
-php7-imagick \
 php7-zlib \
 php7-calendar \
 php7-mysqli \
 php7-soap \
 php7-shmop \
-#php7-wddx \
-php7-cli \
 php7-fpm \
-#php7-phpdbg \
-#php7-embed \
 php7-bz2 \
 php7-sockets \
-#php7-phalcon \
-#php7-memcache \
-#php7-apache2 \
 php7-pdo_mysql \
-#php7-mailparse \
 php7-xdebug \
 php7-sysvmsg \
-#php7-pspell \
 php7-iconv \
-## pecl required
 php7-dev \
 php7-ftp \
 php7-gettext \
-#php7-mssql \
 php7-mcrypt \
-#php7-exif \
 php7-xmlreader \
-#php7-xcache \
 php7-gd \
 php7-xml \
 php7-pcntl \
-php7-phpmailer \
 php7-phar \
 php7-apcu \
 php7-ctype \
-#php7-intl \
 php7-pdo \
 php7-openssl \
 php7-memcached \
@@ -66,29 +48,32 @@ php7-posix \
 php7-dom \
 php7-redis \
 php7-curl \
-#php7-xsl \
-#php7-ldap \
 php7-json \
-#php7-enchant \
 php7-bcmath \
-php7-pear
-#php7-opcache
-#php7-sqlite3 \
-#php7-gmp \
-#php7-snmp
+php7-pear \
+php7-solr \
+php7-mongodb \
+php7-mysqlnd \
+php7-gmagick
+
+#user manager
+RUN apk add sudo && apk add libuser && addgroup -S www && adduser -S -G www www
+#chmod 4755 ./bin/busybox
 
 #config php
-RUN mkdir -pv /app/{conf,logs}
-RUN mkdir -pv /data
-RUN touch /etc/php7/fpm.d/none.conf
+RUN mkdir -pv /app/conf && mkdir -pv /app/logs && chown -R www.www /app/logs/
+RUN mkdir -pv /data && chown -R www.www /data
 RUN touch /var/log/php_errors.log
 RUN chmod 777 -R /var/log/
+
 #去掉ip绑定限制
-RUN sed -i -e "s/listen\s*=\s*127.0.0.1:9000/listen = 9000/g" /etc/php7/php-fpm.conf
+RUN sed -i -e "s/listen\s*=\s*127.0.0.1:9000/listen = 9000/g" /etc/php7/php-fpm.d/www.conf
+RUN sed -i -e "s/user = nobody/user = www/g" /etc/php7/php-fpm.d/www.conf
+RUN sed -i -e "s/group = nobody/group = www/g" /etc/php7/php-fpm.d/www.conf
 RUN mv /etc/php7/php.ini /etc/php7/php.ini_bak
 RUN ln -s /app/conf/php.ini /etc/php7/php.ini
-RUN cd /data/web/
-RUN curl -sS https://getcomposer.org/installer |php7
+#RUN cd /data/web/
+#RUN curl -sS https://getcomposer.org/installer |php7
 
 ##install swoole
 #RUN apk add linux-headers ##install from source need head
@@ -112,4 +97,4 @@ VOLUME /app
 #ENTRYPOINT php-fpm
 
 #exec command when start container
-CMD ["php-fpm","-F"]
+CMD ["php-fpm7","-F"]
