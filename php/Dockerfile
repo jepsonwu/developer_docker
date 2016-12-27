@@ -78,7 +78,7 @@ php5-pear
 #php5-snmp
 
 #config php
-RUN mkdir -pv /app/{conf,logs}
+RUN mkdir -pv /app/conf && mkdir -pv /app/logs
 RUN mkdir -pv /data
 RUN touch /etc/php5/fpm.d/none.conf
 RUN touch /var/log/php_errors.log
@@ -101,6 +101,13 @@ RUN curl -sS https://getcomposer.org/installer |php5
 #RUN pecl install libevent-0.1.0
 #RUN chmod +x /usr/lib/php5/modules/libevent.so
 ## add ini extension = sockets.so  extension=libevent.so
+
+##install sshd
+#RUN apk add openssh
+#RUN ssh-keygen -t rsa -b 2048 -f /etc/ssh/ssh_host_rsa_key
+#RUN sed -i -e "s/#HostKey \/etc\/ssh\/ssh_host_rsa_key/HostKey \/etc\/ssh\/ssh_host_rsa_key/g" /etc/ssh/sshd_config
+#RUN ssh-keygen -t rsa
+#RUN touch ~/.ssh/authorized_keys
 
 #expose
 EXPOSE 9000
