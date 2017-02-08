@@ -57,12 +57,12 @@ php7-mysqlnd \
 php7-gmagick
 
 #user manager
-RUN apk add sudo && apk add libuser && addgroup -S www && adduser -S -G www www
+#RUN apk add sudo && apk add libuser && addgroup -S www && adduser -S -G www www
 #chmod 4755 ./bin/busybox
 
 #config php
-RUN mkdir -pv /app/conf && mkdir -pv /app/logs && chown -R www.www /app/logs/
-RUN mkdir -pv /data && chown -R www.www /data
+RUN mkdir -pv /app/conf && mkdir -pv /app/logs #&& chown -R www.www /app/logs/
+RUN mkdir -pv /data #&& chown -R www.www /data
 RUN touch /var/log/php_errors.log
 RUN chmod 777 -R /var/log/
 
@@ -86,6 +86,12 @@ RUN ln -s /app/conf/php.ini /etc/php7/php.ini
 #RUN pecl install libevent-0.1.0
 #RUN chmod +x /usr/lib/php7/modules/libevent.so
 ## add ini extension = sockets.so  extension=libevent.so
+
+RUN apk add openssh
+RUN ssh-keygen -t rsa -b 2048 -f /etc/ssh/ssh_host_rsa_key
+RUN sed -i -e "s/#HostKey \/etc\/ssh\/ssh_host_rsa_key/HostKey \/etc\/ssh\/ssh_host_rsa_key/g" /etc/ssh/sshd_config
+RUN ssh-keygen -t rsa
+RUN touch ~/.ssh/authorized_keys
 
 #expose
 EXPOSE 9000

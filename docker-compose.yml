@@ -44,6 +44,23 @@ services:
    - store
   restart: always
 
+ php7:
+  build:
+   context: php7
+  image: %auth%/php7%suffix%
+  container_name: php7%suffix%
+  depends_on:
+   - alpine
+   - store
+   - memcached
+  links:
+   - memcached
+  volumes:
+   - %php_app%:/app
+  volumes_from:
+   - store
+  restart: always
+
  nginx:
   build:
    context: nginx
