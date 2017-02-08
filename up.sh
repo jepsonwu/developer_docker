@@ -21,7 +21,7 @@ fi
 suffix='' #empty
 
 #system
-read -p "what's the current operating system?unix:1,windows:2" type
+read -p "what's the current operating system?[unix:1,windows:2]:" type
 case ${type} in
 2) os="windows"
 ;;
