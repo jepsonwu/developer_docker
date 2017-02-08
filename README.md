@@ -13,12 +13,8 @@ Base on alpine.
 - alpine
 - store
 - memcached
-- reids
-- rebitmq
-- ssdb
-- mysql
-- mongodb
-- php
+- php5.6
+- php7
 - nginx
 
 ## Build from sh
@@ -49,9 +45,9 @@ To learn more about all the features of [docker compose](https://docs.docker.com
 ## Notice
 
 ### docker
-- 环境记得配置docker允许共享目录
+- You should shared local drivers you want to be available to your containers
 
 ### docker-compose.yml
 
-- version: '2' 冒号之后需要有空格
--  alpine: 选项之前只能是空格
+- {version: '2'} There is a space after the colon
+- { alpine:} Only is a space before option
