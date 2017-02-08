@@ -90,8 +90,8 @@ RUN ln -s /app/conf/php.ini /etc/php7/php.ini
 RUN apk add openssh
 RUN ssh-keygen -t rsa -b 2048 -f /etc/ssh/ssh_host_rsa_key
 RUN sed -i -e "s/#HostKey \/etc\/ssh\/ssh_host_rsa_key/HostKey \/etc\/ssh\/ssh_host_rsa_key/g" /etc/ssh/sshd_config
-RUN ssh-keygen -t rsa
-RUN touch ~/.ssh/authorized_keys
+#RUN ssh-keygen -t rsa
+#RUN touch ~/.ssh/authorized_keys
 
 #expose
 EXPOSE 9000
