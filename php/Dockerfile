@@ -4,6 +4,8 @@ FROM %auth%/alpine%suffix%:latest
 #maintainer
 MAINTAINER %auth% %email%
 
+RUN apk update && apk upgrade
+
 #install base
 RUN apk add rabbitmq-c
 
@@ -87,8 +89,8 @@ RUN chmod 777 -R /var/log/
 RUN sed -i -e "s/listen\s*=\s*127.0.0.1:9000/listen = 9000/g" /etc/php5/php-fpm.conf
 RUN mv /etc/php5/php.ini /etc/php5/php.ini_bak
 RUN ln -s /app/conf/php.ini /etc/php5/php.ini
-RUN cd /data/web/
-RUN curl -sS https://getcomposer.org/installer |php5
+#RUN cd /data/web/
+#RUN curl -sS https://getcomposer.org/installer |php5
 
 ##install swoole
 #RUN apk add linux-headers ##install from source need head

@@ -4,7 +4,7 @@ FROM %auth%/alpine%suffix%:latest
 #maintainer
 MAINTAINER %auth% %email%
 
-RUN apk update
+RUN apk update && apk upgrade
 
 #install base
 RUN apk add rabbitmq-c

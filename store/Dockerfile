@@ -4,6 +4,8 @@ FROM %auth%/alpine%suffix%:latest
 #maintainer
 MAINTAINER %auth% %email%
 
+RUN apk update && apk upgrade
+
 #store
 RUN mkdir -pv /data
 

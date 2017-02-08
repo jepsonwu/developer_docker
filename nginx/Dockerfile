@@ -4,6 +4,8 @@ FROM %auth%/alpine%suffix%:latest
 #maintainer
 MAINTAINER %auth% %email%
 
+RUN apk update && apk upgrade
+
 #install nginx version
 RUN mkdir -pv /app/{conf,logs}
 RUN mkdir -pv /data
