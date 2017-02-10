@@ -17,6 +17,15 @@ Base on alpine.
 - php7
 - nginx
 
+## Build from exec
+```
+./up -a auth -p project_path
+```
+
+```
+up.exe -a auth -p project_path
+```
+
 ## Build from sh
 
 ```

@@ -57,12 +57,12 @@ php7-mysqlnd \
 php7-gmagick
 
 #user manager
-#RUN apk add sudo && apk add libuser && addgroup -S www && adduser -S -G www www
-#chmod 4755 ./bin/busybox
+RUN apk add sudo && apk add libuser && addgroup -S www && adduser -S -G www www
+RUN chmod 4755 ./bin/busybox
 
 #config php
-RUN mkdir -pv /app/conf && mkdir -pv /app/logs #&& chown -R www.www /app/logs/
-RUN mkdir -pv /data #&& chown -R www.www /data
+RUN mkdir -pv /app/conf && mkdir -pv /app/logs && chown -R www.www /app/logs/
+RUN mkdir -pv /data && chown -R www.www /data
 RUN touch /var/log/php_errors.log
 RUN chmod 777 -R /var/log/
 
