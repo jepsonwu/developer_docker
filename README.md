@@ -19,7 +19,7 @@ Base on alpine.
 
 ## Build from exec
 ```
-./up -a auth -p project_path
+sudo ./up -a auth -p project_path
 ```
 
 ```

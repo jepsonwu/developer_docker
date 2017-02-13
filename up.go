@@ -17,7 +17,6 @@ type BuildInfo struct {
 	auth      *string
 	email     *string
 	suffix    *string
-	system    *uint
 	dockerDir *string
 }
 
@@ -28,7 +27,6 @@ func main() {
 	buildInfo.auth = flag.String("a", "", "docker auth")
 	buildInfo.email = flag.String("email", "", "docker auth email")
 	buildInfo.suffix = flag.String("suffix", "", "container suffix")
-	buildInfo.system = flag.Uint("s", 1, "system type,[1-unix,2-windows]")
 	buildInfo.dockerDir = flag.String("docker", "", "docker bin directory")
 	help := flag.Bool("help", false, "usage help")
 	flag.Parse()
@@ -69,7 +67,7 @@ func main() {
 	default:
 		*buildInfo.dockerDir = filepath.Join(*buildInfo.dockerDir, "docker-compose")
 	}
-	cmd := exec.Command(*buildInfo.dockerDir, "up &")
+	cmd := exec.Command(*buildInfo.dockerDir, "up")
 	stdout, _ := cmd.StdoutPipe()
 	reader := bufio.NewReader(stdout)
 
