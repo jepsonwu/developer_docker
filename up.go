@@ -21,9 +21,9 @@ type BuildInfo struct {
 	dockerDir *string
 }
 
-func main() {
-	var buildInfo BuildInfo
+var buildInfo BuildInfo
 
+func main() {
 	buildInfo.project = flag.String("p", "", "project path")
 	buildInfo.auth = flag.String("a", "", "docker auth")
 	buildInfo.email = flag.String("email", "", "docker auth email")
@@ -36,48 +36,31 @@ func main() {
 	if (*help || flag.NFlag() == 0) {
 		fmt.Println("Usage:", os.Args[0], " [project path] [docker auth]")
 		flag.Usage()
-		os.Exit(1)
+		return
 	}
 
 	if *buildInfo.project == "" {
 		fmt.Println("You must configure project path")
-		os.Exit(1)
+		return
 	}
 
 	if *buildInfo.auth == "" {
 		fmt.Println("You must configure docker auth")
-		os.Exit(1)
+		return
 	}
 
-	currentPath, _ := filepath.Abs(filepath.Dir(os.Args[0]))
-	currentPath = currentPath + string(filepath.Separator)
+	currentPath, _ := os.Getwd()
 
 	//copy project
 	*buildInfo.project, _ = filepath.Abs(*buildInfo.project)
 	*buildInfo.project = filepath.Dir(*buildInfo.project + string(filepath.Separator))
 
-	nginxConf := filepath.Join(*buildInfo.project, "nginx", "conf") + string(filepath.Separator)
-	createDir(nginxConf)
-	copyDir(filepath.Join(currentPath, "projects", "config", "nginx") + string(filepath.Separator), nginxConf)
-	createDir(filepath.Join(*buildInfo.project, "nginx", "logs"))
-
-	phpConf := filepath.Join(*buildInfo.project, "php", "conf") + string(filepath.Separator)
-	createDir(phpConf)
-	copyDir(filepath.Join(currentPath, "projects", "config", "php") + string(filepath.Separator), phpConf)
-	createDir(filepath.Join(*buildInfo.project, "php", "logs"))
-
-	dataConf := filepath.Join(*buildInfo.project, "data") + string(filepath.Separator)
-	createDir(dataConf)
-	copyDir(filepath.Join(currentPath, "projects", "data") + string(filepath.Separator), dataConf)
+	copyDir(filepath.Join(currentPath, "projects") + string(filepath.Separator),
+		*buildInfo.project + string(filepath.Separator))
 
 	//replace config
-	replaceDir(currentPath, "%auth%", *buildInfo.auth)
-	replaceDir(currentPath, "%email%", *buildInfo.email)
-	replaceDir(currentPath, "%suffix%", *buildInfo.suffix)
-	dockerComposeYml := filepath.Join(currentPath, "docker-compose.yml")
-	replaceFile(dockerComposeYml, "%store_data%", filepath.Join(*buildInfo.project, "data"))
-	replaceFile(dockerComposeYml, "%php_app%", filepath.Join(*buildInfo.project, "php"))
-	replaceFile(dockerComposeYml, "%nginx_app%", filepath.Join(*buildInfo.project, "nginx"))
+	replaceBuildInfo()
+	replaceComposeInfo()
 
 	//exec docker-composer
 	switch runtime.GOOS {
@@ -86,7 +69,7 @@ func main() {
 	default:
 		*buildInfo.dockerDir = filepath.Join(*buildInfo.dockerDir, "docker-compose")
 	}
-	cmd := exec.Command(*buildInfo.dockerDir, "up")
+	cmd := exec.Command(*buildInfo.dockerDir, "up &")
 	stdout, _ := cmd.StdoutPipe()
 	reader := bufio.NewReader(stdout)
 
@@ -103,6 +86,63 @@ func main() {
 	}
 
 	cmd.Wait()
+	return
+}
+
+func replaceComposeInfo() (err error) {
+	currentPath, _ := os.Getwd()
+	dockerComposeYml := filepath.Join(currentPath, "docker-compose.yml")
+
+	var replaceMap = make(map[string]string)
+	replaceMap["%store_data%"] = filepath.Join(*buildInfo.project, "data")
+	replaceMap["%php_app%"] = filepath.Join(*buildInfo.project, "php")
+	replaceMap["%nginx_app%"] = filepath.Join(*buildInfo.project, "nginx")
+
+	for search := range replaceMap {
+		err = replaceFile(dockerComposeYml, search, replaceMap[search])
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func replaceBuildInfo() (err error) {
+	currentPath, _ := os.Getwd()
+	var replaceMap = make(map[string]string)
+	replaceMap["%auth%"] = *buildInfo.auth
+	replaceMap["%email%"] = *buildInfo.email
+	replaceMap["%suffix%"] = *buildInfo.suffix
+
+	err = filepath.Walk(currentPath, func(path string, f os.FileInfo, err error) error {
+		if f == nil {
+			return err
+		}
+
+		if inArray(f.Name(), []string{"Dockerfile", "build.sh", "docker-compose.yml"}) != -1 {
+			for search := range replaceMap {
+				err = replaceFile(path, search, replaceMap[search])
+				if err != nil {
+					return err
+				}
+			}
+		}
+
+		return nil
+	})
+
+	return nil;
+}
+
+func inArray(target string, haystack []string) int {
+	for index, val := range haystack {
+		if val == target {
+			return index
+		}
+	}
+
+	return -1
 }
 
 //todo support provide array
@@ -148,28 +188,6 @@ func replaceFile(fileName, search, replace string) (err error) {
 	return nil
 }
 
-func replaceDir(path, search, replace string) (err error) {
-	err = filepath.Walk(path, func(path string, f os.FileInfo, err error) error {
-		if f == nil {
-			return err
-		}
-
-		if f.IsDir() || strings.Index(f.Name(), "up") != -1 {
-			//获取自己文件名
-			return nil
-		}
-
-		err = replaceFile(path, search, replace)
-		if err != nil {
-			return err
-		}
-
-		return nil
-	})
-
-	return nil;
-}
-
 func copyDir(srcDir, desDir string) (err error) {
 	err = filepath.Walk(srcDir, func(path string, f os.FileInfo, err error) error {
 		if f == nil {
@@ -203,7 +221,7 @@ func copyFile(srcFile, desFile string) (written int64, err error) {
 	}
 	defer src.Close()
 
-	dst, err := os.OpenFile(desFile, os.O_WRONLY | os.O_CREATE | os.O_TRUNC, 0644)
+	dst, err := os.OpenFile(desFile, os.O_WRONLY | os.O_CREATE | os.O_TRUNC, 0766)
 	if err != nil {
 		return
 	}
@@ -212,7 +230,7 @@ func copyFile(srcFile, desFile string) (written int64, err error) {
 }
 
 func createDir(path string) {
-	err := os.MkdirAll(path, 0644)
+	err := os.MkdirAll(path, 0766)
 	if err != nil {
 		fmt.Printf("Create directory \"%s\" error:%s", path, err)
 	}
