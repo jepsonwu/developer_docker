@@ -26,6 +26,10 @@ sudo ./up -a auth -p project_path
 up.exe -a auth -p project_path
 ```
 
+```
+add 127.0.0.1 demo.com >>hosts
+```
+
 ## Build from sh
 
 ```
