@@ -70,8 +70,8 @@ services:
    - %php_app%:/app
   volumes_from:
    - store
-  ports:
-     - 2122:22
+#  ports:
+#     - 2122:22
   restart: always
 
  php7:
@@ -92,9 +92,9 @@ services:
   volumes:
    - %php_app%:/app
   volumes_from:
-   - store
-  ports:
-     - 2123:22
+#   - store
+#  ports:
+#     - 2123:22
   restart: always
 
  nginx:

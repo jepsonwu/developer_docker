@@ -7,7 +7,7 @@ MAINTAINER %auth% %email%
 RUN apk update && apk upgrade
 
 #install nginx version
-RUN mkdir -pv /app/{conf,logs}
+RUN mkdir -pv /app/conf && mkdir -pv /app/logs
 RUN mkdir -pv /data
 
 #apk install nginx

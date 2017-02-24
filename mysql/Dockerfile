@@ -6,7 +6,6 @@ MAINTAINER %auth% %email%
 
 #must exec before volume
 RUN mkdir -pv /data
-#RUN mkdir -pv /data/mysql
 
 WORKDIR /data
 
