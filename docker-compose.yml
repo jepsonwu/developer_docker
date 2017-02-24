@@ -27,6 +27,30 @@ services:
    - alpine
   restart: always
 
+ redis:
+  build:
+   context: redis
+  image: %auth%/redis%suffix%
+  container_name: redis%suffix%
+  depends_on:
+   - alpine
+  ports:
+     - 6379:6379
+  restart: always
+
+ mysql:
+  build:
+   context: mysql
+  image: %auth%/mysql%suffix%
+  container_name: mysql%suffix%
+  depends_on:
+   - alpine
+  ports:
+     - 3306:3306
+  volumes_from:
+   - store
+  restart: always
+
  php:
   build:
    context: php
@@ -36,12 +60,18 @@ services:
    - alpine
    - store
    - memcached
+   - redis
+   - mysql
   links:
    - memcached
+   - redis
+   - mysql
   volumes:
    - %php_app%:/app
   volumes_from:
    - store
+  ports:
+     - 2122:22
   restart: always
 
  php7:
@@ -53,12 +83,18 @@ services:
    - alpine
    - store
    - memcached
+   - redis
+   - mysql
   links:
    - memcached
+   - redis
+   - mysql
   volumes:
    - %php_app%:/app
   volumes_from:
    - store
+  ports:
+     - 2123:22
   restart: always
 
  nginx:
@@ -71,7 +107,7 @@ services:
    - store
    - php
   links:
-   - php
+   - php7
   volumes:
    - %nginx_app%:/app
   volumes_from:
