@@ -13,35 +13,47 @@ Base on alpine.
 - alpine
 - store
 - memcached
+- redis
+- mysql5.6
 - php5.6
 - php7
 - nginx
 
 ## Build from exec
+* Create your project directory,and make sure it's shared on docker.
+
+* Exec on linux
+
 ```
 sudo ./up -a auth -p project_path
 ```
+
+* Exec on mac
+
+```
+sudo ./up_mac -a auth -p project_path
+```
+
+* Exec on windows
 
 ```
 up.exe -a auth -p project_path
 ```
 
+* Add demo host,let's start.
+
 ```
 add 127.0.0.1 demo.com >>hosts
 ```
 
-## Build from sh
-
-```
-./up.sh
-```
-
 ## Manual build
 
+* Build images,but you must edit build info before exec.
 ```
 cd alpine && ./build.sh
 ```
 
+* Run container
 ```
 docker run --name store -d -it -v  /data_path:/data jepson/store
 
