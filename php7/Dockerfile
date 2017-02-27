@@ -54,7 +54,8 @@ php7-pear \
 php7-solr \
 php7-mongodb \
 php7-mysqlnd \
-php7-gmagick
+php7-gmagick \
+php7-mbstring
 
 #user manager
 RUN apk add sudo && apk add libuser && addgroup -S www && adduser -S -G www www
