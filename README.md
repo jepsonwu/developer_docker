@@ -59,9 +59,9 @@ docker run --name store -d -it -v  /data_path:/data jepson/store
 
 docker run --name memcached -d jepson/memcached
 
-docker run --name php -d -it -v  /data_path:/app --volumes-from store --link memcached jepson/php
+docker run --name php -d -it -v  /data_path:/app --volumes-from store --link memcached jepson/php sh
 
-docker run --name nginx -d -p 80:80 -v  /data_path:/app --volumes-from store --link php jepson/nginx
+docker run --name nginx -d -it -p 80:80 -v  /data_path:/app --volumes-from store --link php jepson/nginx sh
 ```
 
 ## More
